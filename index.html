@@ -453,6 +453,50 @@
         .footer-text { color: #888; font-size: 0.9rem; letter-spacing: 1px; font-family: 'Outfit', sans-serif; margin-bottom: 5px;}
         .footer-dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
         .footer-dot { width: 6px; height: 6px; border-radius: 50%; }
+/* =========================================
+           FIX TAMPILAN HP (MOBILE RESPONSIVE FULL)
+           ========================================= */
+        @media (max-width: 850px) {
+            /* Global HP */
+            section { padding: 60px 5% !important; min-height: auto !important; }
+            .section-title { font-size: 2.5rem !important; }
+            
+            /* Hero Cover HP (Biar teks ga raksasa & foto di atas) */
+            .hero-layout { flex-direction: column-reverse !important; text-align: center !important; gap: 30px !important; margin-top: 30px !important; }
+            .hero-headline { font-size: 2.5rem !important; margin-top: 15px !important; }
+            .hero-text { display: flex; flex-direction: column; align-items: center; }
+            .hero-profile-pic { max-width: 250px !important; margin: 0 auto !important; }
+            .hero-badge { margin-bottom: 10px !important; }
+            
+            /* About Me HP (Biar ga lari ke kiri/kanan) */
+            .about-grid.enhanced-card { flex-direction: column !important; padding: 30px 20px !important; text-align: center !important; gap: 30px !important; }
+            .about-image-wrapper { width: 200px !important; height: 200px !important; margin: 0 auto !important; }
+            .about-text-content p { text-align: center !important; font-size: 1rem !important; }
+            .about-skills { justify-content: center !important; }
+            
+            /* Leadership HP (Numpuk ke bawah rapi) */
+            .lead-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+            
+            /* Certifications HP (Hapus Zig-zag biar ga gepeng) */
+            .cert-fresh-container { gap: 50px !important; }
+            .cert-fresh-item, .cert-fresh-item:nth-child(even) { flex-direction: column !important; gap: 20px !important; text-align: center !important; }
+            .cert-photo-wrap { width: 100% !important; perspective: none !important; }
+            .cert-photo-frame { transform: none !important; padding: 10px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; aspect-ratio: auto !important; }
+            .cert-fresh-item:nth-child(even) .cert-photo-frame { transform: none !important; }
+            .cert-text-wrap { padding: 0 !important; }
+            .cert-number-watermark { text-align: center !important; font-size: 4rem !important; margin-bottom: 0 !important; }
+            
+            /* Storytelling HP (Biar fotonya keliatan semua) */
+            .story-gallery { flex-direction: column !important; height: auto !important; gap: 20px !important; }
+            .story-item { flex: none !important; width: 100% !important; height: 280px !important; }
+            .story-info { opacity: 1 !important; transform: none !important; bottom: 15px !important; left: 15px !important; right: 15px !important; padding: 15px !important; }
+            .story-icon { display: none !important; }
+            
+            /* Contact & Footer HP */
+            .contact-card { padding: 40px 20px !important; }
+            .elegant-glow-title { font-size: 2.5rem !important; }
+            .contact-card p { font-size: 1rem !important; }
+        }
     </style>
 </head>
 <body>
