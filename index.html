@@ -1,0 +1,800 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velysha | Future AI Communicator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. CSS VARIABLES & BASE STYLES
+           ========================================= */
+        :root {
+            --bg-color: #050505; 
+            --surface-color: #121212; 
+            --google-blue: #4285F4;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --glow-spread: rgba(66, 133, 244, 0.3);
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
+
+        * html {
+    scroll-padding-top: 80px; /* Ini "rem" biar scroll berhentinya elegan */
+}
+
+        h1, h2, h3, .section-title, .hero-headline, .elegant-glow-title, .story-title, .cert-title {
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .mouse-glow {
+            position: fixed; top: 0; left: 0; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.1) 0%, transparent 60%);
+            border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 9999;
+        }
+
+        section { min-height: 100vh; padding: 100px 10%; display: flex; flex-direction: column; justify-content: center; position: relative; border-bottom: 1px solid var(--border-color); }
+
+        .section-title { font-size: 3rem; margin-bottom: 40px; }
+        
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* =========================================
+           2. HERO SECTION
+           ========================================= */
+        .hero-layout { display: flex; align-items: center; justify-content: space-between; gap: 50px; width: 100%; }
+        .hero-text { flex: 1; max-width: 600px; }
+        .hero-image-container { flex: 1; display: flex; justify-content: center; position: relative; }
+        .hero-profile-pic { width: 100%; max-width: 380px; filter: drop-shadow(0 0 25px rgba(66, 133, 244, 0.5)); transition: all 0.4s ease; }
+        .hero-profile-pic:hover { transform: translateY(-15px) scale(1.02); filter: drop-shadow(0 0 45px rgba(66, 133, 244, 0.8)); }
+
+        #hero { background: radial-gradient(circle at 10% 20%, rgba(66, 133, 244, 0.05) 0%, transparent 50%); }
+        
+        .hero-badge {
+            display: inline-block; padding: 8px 18px; background: rgba(66, 133, 244, 0.1); color: var(--google-blue);
+            border: 1px solid rgba(66, 133, 244, 0.3); border-radius: 50px; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px; box-shadow: 0 0 15px rgba(66, 133, 244, 0.15); font-family: 'Outfit', sans-serif;
+        }
+
+        .hero-headline { font-size: 4.5rem; line-height: 1.1; margin-bottom: 20px; }
+        .hero-headline span { color: var(--google-blue); text-shadow: 0 0 30px var(--glow-spread); }
+
+        .typing-container { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 30px; height: 35px; }
+        .typed-text { color: var(--google-blue); font-weight: 600; }
+        .cursor { display: inline-block; width: 3px; background-color: var(--google-blue); animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; }
+        .btn { padding: 15px 30px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; font-size: 1rem; }
+        .btn-primary { background-color: var(--google-blue); color: #fff; border: 1px solid var(--google-blue); box-shadow: 0 0 15px transparent; }
+        .btn-primary:hover { box-shadow: 0 0 25px var(--glow-spread); transform: translateY(-3px); }
+        .btn-outline { background-color: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-outline:hover { border-color: var(--google-blue); color: var(--google-blue); transform: translateY(-3px); box-shadow: 0 0 20px rgba(66, 133, 244, 0.1); }
+
+        /* =========================================
+           3. ABOUT ME (SUPER INTERAKTIF & ANIMATED)
+           ========================================= */
+        .about-container { position: relative; width: 100%; padding: 80px 0; }
+        .about-bg-blobs { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; filter: blur(120px); opacity: 0.3; pointer-events: none;}
+        .blob { position: absolute; border-radius: 50%; animation: blob-float 15s infinite alternate ease-in-out; }
+        .blob-1 { width: 400px; height: 400px; background: rgba(66, 133, 244, 0.7); top: -100px; left: -100px; }
+        .blob-2 { width: 350px; height: 350px; background: rgba(251, 188, 5, 0.7); bottom: -50px; right: -100px; animation-delay: -5s; }
+
+        @keyframes blob-float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(100px, 50px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
+
+        .about-content-wrapper { position: relative; z-index: 2; max-width: 1000px; margin: 0 auto; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; align-items: center; }
+        
+        .enhanced-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-left: 3px solid rgba(66, 133, 244, 0.5); padding: 50px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); backdrop-filter: blur(20px); position: relative;
+        }
+
+        /* --- FOTO INTERAKTIF (BISA GERAK & DIPENCET) --- */
+        .about-image-wrapper { 
+            position: relative; width: 100%; aspect-ratio: 9/16; max-width: 320px; margin: 0 auto; 
+            perspective: 1000px; cursor: pointer; 
+            animation: floatImage 6s ease-in-out infinite; /* Foto melayang pelan otomatis */
+        }
+        @keyframes floatImage { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .photo-frame { 
+            position: relative; width: 100%; height: 100%; border-radius: 40px; overflow: hidden; 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease; 
+            transform-style: preserve-3d; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .about-photo { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease, filter 0.5s ease; filter: brightness(0.9); }
+        
+        /* HOVER: Miring 3D */
+        .about-image-wrapper:hover { animation-play-state: paused; /* Berhenti melayang pas disentuh */ }
+        .about-image-wrapper:hover .photo-frame { 
+            transform: rotateY(15deg) rotateX(5deg) scale(1.05); 
+            box-shadow: -20px 20px 40px rgba(66, 133, 244, 0.4), 0 0 20px rgba(255, 255, 255, 0.2); 
+            border-color: rgba(66, 133, 244, 0.8); 
+        }
+        .about-image-wrapper:hover .about-photo { transform: scale(1.1); filter: brightness(1.1); }
+        
+        /* ACTIVE: Efek "Dipencet" beneran */
+        .about-image-wrapper:active .photo-frame { 
+            transform: scale(0.9) rotateY(0deg) rotateX(0deg); /* Menciut ke dalem */
+            box-shadow: 0 0 60px rgba(251, 188, 5, 1); /* Ledakan cahaya Emas */
+            border-color: #FBBC05; 
+            transition: all 0.1s; /* Gerakan cepat pas ditekan */
+        }
+
+        /* --- TEKS ANIMASI MASUK --- */
+        .text-animated {
+            opacity: 0; transform: translateY(30px);
+            animation: slideUpFade 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+
+        .about-text-content p { font-size: 1.1rem; color: #b0b3b8; margin-bottom: 20px; line-height: 1.8; transition: color 0.3s ease; }
+        .enhanced-card:hover .about-text-content p { color: #e8eaed; }
+
+        /* KEYWORD WARNA GOOGLE BERJALAN */
+        .glow-text {
+            background: linear-gradient(90deg, #4285F4, #FBBC05, #EA4335, #34A853, #4285F4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: textGradientFlow 4s linear infinite;
+            font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        @keyframes textGradientFlow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+        /* SKILLS BADGE */
+        .about-skills { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .skill-badge { padding: 8px 20px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px; font-size: 0.85rem; font-weight: 500; color: #b0b3b8; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+        .skill-badge:hover { color: #ffffff; transform: translateY(-5px) scale(1.1); }
+        .skill-badge.blue:hover { border-color: #4285F4; box-shadow: 0 5px 20px rgba(66, 133, 244, 0.4); background: rgba(66, 133, 244, 0.1); }
+        .skill-badge.red:hover { border-color: #EA4335; box-shadow: 0 5px 20px rgba(234, 67, 53, 0.4); background: rgba(234, 67, 53, 0.1); }
+        .skill-badge.yellow:hover { border-color: #FBBC05; box-shadow: 0 5px 20px rgba(251, 188, 5, 0.4); background: rgba(251, 188, 5, 0.1); }
+
+        /* HIASAN MELAYANG */
+        .deco-dot, .deco-star { position: absolute; pointer-events: none; z-index: 10; }
+        .deco-dot { border-radius: 50%; width: 15px; height: 15px; filter: blur(3px); }
+        .dot-blue { background: #4285F4; top: -10px; left: -10px; animation: twinkle 3s infinite alternate; }
+        .dot-red { background: #EA4335; bottom: 20px; right: -20px; animation: twinkle 4s infinite alternate; }
+        .dot-yellow { background: #FBBC05; top: 50%; left: -30px; animation: twinkle 2.5s infinite alternate; }
+        .deco-star { width: 35px; height: 35px; }
+        .deco-star svg { fill: currentColor; width: 100%; height: 100%; }
+        .star-green { color: #34A853; top: -20px; right: 20%; opacity: 0.6; animation: twinkle 3s infinite;}
+        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+        /* =========================================
+           4. LEADERSHIP & ENGAGEMENT (INTERACTIVE)
+           ========================================= */
+        .lead-section { position: relative; overflow: hidden; padding: 100px 0; width: 100%; }
+        .lead-container { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 10%; }
+        .lead-bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(66, 133, 244, 0.08) 0%, transparent 60%); top: 0; right: -200px; z-index: 1; pointer-events: none; }
+        .lead-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 50px; }
+        
+        .lead-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px; position: relative; overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column;
+            backdrop-filter: blur(10px); box-shadow: 0 15px 35px rgba(0,0,0,0.3); cursor: pointer;
+        }
+        .lead-card::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            opacity: 0; transition: 0.5s; z-index: 2; pointer-events: none;
+        }
+        .lead-card:hover { transform: translateY(-15px); border-color: rgba(255,255,255,0.1); }
+        .lead-card:hover::before { opacity: 1; }
+
+        .lead-img-box { width: 100%; height: 220px; overflow: hidden; position: relative; z-index: 1; background: linear-gradient(135deg, #111 0%, #1a1a1a 100%); }
+        .lead-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease, filter 0.5s ease; filter: grayscale(20%) brightness(0.8); }
+        .lead-card:hover .lead-img { transform: scale(1.1); filter: grayscale(0%) brightness(1.1); }
+
+        .lead-info { padding: 30px; display: flex; flex-direction: column; flex-grow: 1; position: relative; z-index: 3; background: linear-gradient(to top, rgba(15,15,15,1) 0%, rgba(20,20,20,0.8) 100%); }
+        .lead-badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; width: fit-content; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(5px); font-family: 'Outfit', sans-serif;}
+        .lead-info h3 { font-size: 1.8rem; color: #fff; margin-bottom: 12px; transition: color 0.3s; font-family: 'Cormorant Garamond', serif;}
+        .lead-info p { font-size: 0.95rem; color: #a0a0a0; line-height: 1.7; }
+
+        .lead-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 4px; transition: 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; }
+        .lead-card:hover::after { width: 100%; }
+
+        /* Warnanya */
+        .card-1:hover { box-shadow: 0 20px 50px rgba(66, 133, 244, 0.2); }
+        .card-1::after { background: #4285F4; box-shadow: 0 0 15px #4285F4; }
+        .card-1 .lead-badge { background: rgba(66, 133, 244, 0.1); color: #8ab4f8; border: 1px solid rgba(66, 133, 244, 0.3); }
+        .card-1:hover h3 { color: #8ab4f8; }
+
+        .card-2:hover { box-shadow: 0 20px 50px rgba(234, 67, 53, 0.2); }
+        .card-2::after { background: #EA4335; box-shadow: 0 0 15px #EA4335; }
+        .card-2 .lead-badge { background: rgba(234, 67, 53, 0.1); color: #f28b82; border: 1px solid rgba(234, 67, 53, 0.3); }
+        .card-2:hover h3 { color: #f28b82; }
+
+        .card-3:hover { box-shadow: 0 20px 50px rgba(251, 188, 5, 0.2); }
+        .card-3::after { background: #FBBC05; box-shadow: 0 0 15px #FBBC05; }
+        .card-3 .lead-badge { background: rgba(251, 188, 5, 0.1); color: #fde293; border: 1px solid rgba(251, 188, 5, 0.3); }
+        .card-3:hover h3 { color: #fde293; }
+
+        .card-4:hover { box-shadow: 0 20px 50px rgba(52, 168, 83, 0.2); }
+        .card-4::after { background: #34A853; box-shadow: 0 0 15px #34A853; }
+        .card-4 .lead-badge { background: rgba(52, 168, 83, 0.1); color: #81c995; border: 1px solid rgba(52, 168, 83, 0.3); }
+        .card-4:hover h3 { color: #81c995; }
+
+        /* =========================================
+           5. CERTIFICATIONS (FRESH 3D ZIG-ZAG)
+           ========================================= */
+        .cert-fresh-section { position: relative; padding: 120px 0; overflow: hidden; background: linear-gradient(180deg, var(--bg-color) 0%, rgba(66, 133, 244, 0.03) 50%, var(--bg-color) 100%); }
+        .cert-bg-text { position: absolute; top: 10%; left: -5%; font-size: 15rem; font-weight: 800; color: rgba(255,255,255,0.02); z-index: 0; pointer-events: none; letter-spacing: 15px; text-transform: uppercase; white-space: nowrap; font-family: 'Outfit', sans-serif;}
+        .cert-fresh-container { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 100px; padding: 0 5%; }
+        .cert-fresh-item { display: flex; align-items: center; gap: 60px; position: relative; }
+        .cert-fresh-item:nth-child(even) { flex-direction: row-reverse; }
+        
+        .cert-photo-wrap { flex: 1; position: relative; perspective: 1000px; z-index: 2; }
+        .cert-photo-frame { width: 100%; aspect-ratio: 4/3; padding: 15px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(15px); transform: rotateY(15deg) rotateX(5deg); transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: -20px 30px 50px rgba(0,0,0,0.5); position: relative; }
+        .cert-fresh-item:nth-child(even) .cert-photo-frame { transform: rotateY(-15px) rotateX(5deg); box-shadow: 20px 30px 50px rgba(0,0,0,0.5); }
+        .cert-photo-frame:hover { transform: rotate(0) scale(1.05); border-color: rgba(66, 133, 244, 0.5); box-shadow: 0 20px 50px rgba(66, 133, 244, 0.2); }
+        .cert-photo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; filter: brightness(0.9); transition: 0.5s; }
+        .cert-photo-frame:hover img { filter: brightness(1.1); }
+        
+        .cert-year-badge { position: absolute; top: -15px; right: -15px; background: #121212; border: 1px solid rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 30px; font-weight: 800; color: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 5; font-family: 'Outfit', sans-serif;}
+        .cert-fresh-item:nth-child(even) .cert-year-badge { right: auto; left: -15px; }
+
+        .cert-text-wrap { flex: 1; padding: 20px; position: relative; z-index: 2; }
+        .cert-number-watermark { font-size: 6rem; font-weight: 800; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.1); line-height: 0.8; margin-bottom: -20px; opacity: 0.5; font-family: 'Outfit', sans-serif;}
+        .cert-text-wrap h3 { font-size: 2.2rem; color: #fff; margin-bottom: 15px; line-height: 1.2; font-family: 'Cormorant Garamond', serif;}
+        .cert-text-wrap p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.7; }
+        .cert-chip { display: inline-block; padding: 6px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: 'Outfit', sans-serif;}
+
+        /* =========================================
+           DIGITAL STORYTELLING (MENYALA, CLASSY & GAK BORING)
+           ========================================= */
+        .story-section { position: relative; padding: 150px 0; overflow: hidden; width: 100%; background: #050505; }
+        .story-container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 5; }
+
+        /* Glowing Background Orbs ( matching background dots ) */
+        .story-glow-1 { position: absolute; top: -10%; left: -10%; width: 500px; height: 500px; background: rgba(66, 133, 244, 0.2); filter: blur(120px); border-radius: 50%; z-index: 1; animation: pulseGlow 6s infinite alternate; }
+        .story-glow-2 { position: absolute; bottom: -20%; right: -10%; width: 600px; height: 600px; background: rgba(251, 188, 5, 0.15); filter: blur(150px); border-radius: 50%; z-index: 1; animation: pulseGlow 8s infinite alternate-reverse; }
+        
+        @keyframes pulseGlow { 0% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+        /* Floating Stars/Particles */
+        .sparkle-star { position: absolute; z-index: 2; animation: twinkle 3s infinite ease-in-out; filter: drop-shadow(0 0 15px currentColor); }
+        .sparkle-dot { position: absolute; border-radius: 50%; z-index: 2; box-shadow: 0 0 15px currentColor, 0 0 30px currentColor; animation: floatUp 10s infinite linear; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(15deg); } }
+        @keyframes floatUp { 0% { transform: translateY(100px) scale(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-300px) scale(1.5); opacity: 0; } }
+
+        /* Accordion Gallery */
+        .story-gallery { display: flex; height: 500px; gap: 20px; margin-top: 60px; }
+        .story-item {
+            position: relative; flex: 1; border-radius: 30px; overflow: hidden;
+            transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5); background: #111;
+        }
+        
+        /* HOVER EFFECT: Melebar & Menyala Warna Emas */
+        .story-item:hover { 
+            flex: 4; border-color: rgba(251, 188, 5, 0.6); 
+            box-shadow: 0 20px 60px rgba(251, 188, 5, 0.3), inset 0 0 20px rgba(251, 188, 5, 0.2); 
+        }
+        
+        .story-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.7s ease; filter: grayscale(80%) brightness(0.4); }
+        .story-item:hover .story-img { filter: grayscale(0%) brightness(1.1); transform: scale(1.05); }
+
+        /* Kotak Info: Muncul Kaca Estetik */
+        .story-info {
+            position: absolute; bottom: 30px; left: 30px; right: 30px; padding: 25px 35px;
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(251, 188, 5, 0.3);
+            border-radius: 20px; opacity: 0; transform: translateY(30px); transition: all 0.5s ease 0.2s;
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .story-item:hover .story-info { opacity: 1; transform: translateY(0); }
+        
+        /* TEKS YANG UNIK, SERU & MEWAH */
+        .story-title {
+            color: #fff; font-size: 2.2rem; margin-bottom: 5px; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            transition: all 0.5s ease;
+        }
+        
+        /* Animasi Glow & Warna Emas saat Hover */
+        .story-item:hover .story-title {
+            color: #FBBC05; /* Warna Gold */
+            text-shadow: 0 0 15px rgba(251, 188, 5, 1), 0 0 30px rgba(251, 188, 5, 0.7), 0 0 50px rgba(251, 188, 5, 0.4);
+            animation: glitchEffect 0.2s ease infinite; /* Efek neon/glitch seru */
+        }
+        
+        @keyframes glitchEffect {
+            0% { text-shadow: 0 0 15px rgba(251, 188, 5, 1); }
+            50% { text-shadow: 0 0 25px rgba(251, 188, 5, 1), 0 0 50px rgba(251, 188, 5, 0.7); }
+            100% { text-shadow: 0 0 15px rgba(251, 188, 5, 1); }
+        }
+
+        .story-subtitle { color: #FBBC05; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(251, 188, 5, 0.5); }
+        .story-icon { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, rgba(251, 188, 5, 0.2), transparent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid rgba(251, 188, 5, 0.5); box-shadow: 0 0 15px rgba(251, 188, 5, 0.3); }
+
+        .elegant-glow-title { color: #ffffff; text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.1); }
+        .elegant-glow-title span { color: #FBBC05; text-shadow: 0 0 20px rgba(251,188,5,0.8); }
+
+        @media (max-width: 768px) {
+            .story-gallery { flex-direction: column; height: auto; }
+            .story-item { height: 250px; flex: auto !important; }
+            .story-img { filter: grayscale(0%) brightness(0.8); }
+            .story-info { opacity: 1; transform: translateY(0); bottom: 15px; left: 15px; right: 15px; padding: 15px; }
+            .story-title { font-size: 1.5rem; }
+            .story-icon { display: none; }
+        }
+/* =========================================
+           FIX LEADERSHIP & STORYTELLING YANG KETENDANG KE KANAN
+           ========================================= */
+        #leadership, #portfolio {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            width: 100% !important;
+            overflow: hidden !important;
+        }
+
+        .lead-container, .story-container {
+            width: 100% !important;
+            max-width: 1100px !important;
+            margin: 0 auto !important;
+            padding: 0 !important; /* Ini yang ngehapus dorongan ganda dari kiri */
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important; /* Paksa semua isinya ke tengah */
+        }
+
+        .lead-grid {
+            width: 100% !important;
+            justify-content: center !important;
+            margin-top: 40px !important;
+        }
+
+        .story-gallery {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+
+        #leadership h2.section-title, #portfolio h2.section-title {
+            text-align: center !important;
+            width: 100% !important;
+            margin-bottom: 20px !important;
+        }
+/* =========================================
+           FIX GLOW WARNA-WARNI SERTIFIKAT 
+           (Biru, Merah, Hijau, Kuning)
+           ========================================= */
+        
+        /* 1. Sertif INSCaw (Biru) */
+        .cert-fresh-item:nth-of-type(1) .cert-photo-frame:hover {
+            border-color: #4285F4 !important;
+            box-shadow: 0 20px 50px rgba(66, 133, 244, 0.4) !important;
+        }
+
+        /* 2. Sertif Akuntansi 1 (Merah) */
+        .cert-fresh-item:nth-of-type(2) .cert-photo-frame:hover {
+            border-color: #EA4335 !important;
+            box-shadow: 0 20px 50px rgba(234, 67, 53, 0.4) !important;
+        }
+
+        /* 3. Sertif Akuntansi 2 (Hijau) */
+        .cert-fresh-item:nth-of-type(3) .cert-photo-frame:hover {
+            border-color: #34A853 !important;
+            box-shadow: 0 20px 50px rgba(52, 168, 83, 0.4) !important;
+        }
+
+        /* 4. Sertif Seminar (Kuning/Emas) */
+        .cert-fresh-item:nth-of-type(4) .cert-photo-frame:hover {
+            border-color: #FBBC05 !important;
+            box-shadow: 0 20px 50px rgba(251, 188, 5, 0.4) !important;
+        }
+/* =========================================
+           FIX GLOW WARNA-WARNI STORYTELLING
+           ========================================= */
+        
+        /* CONTENT 1: Glow Secret (Emas) */
+        .story-item:nth-child(1):hover {
+            border-color: rgba(251, 188, 5, 0.6) !important;
+            box-shadow: 0 20px 60px rgba(251, 188, 5, 0.3), inset 0 0 20px rgba(251, 188, 5, 0.2) !important;
+        }
+        .story-item:nth-child(1) .story-subtitle { color: #FBBC05 !important; text-shadow: 0 0 10px rgba(251, 188, 5, 0.5) !important; }
+        .story-item:nth-child(1) .story-icon { background: linear-gradient(135deg, rgba(251, 188, 5, 0.2), transparent) !important; border-color: rgba(251, 188, 5, 0.5) !important; box-shadow: 0 0 15px rgba(251, 188, 5, 0.3) !important; }
+        .story-item:nth-child(1):hover .story-title { color: #FBBC05 !important; text-shadow: 0 0 15px rgba(251, 188, 5, 1), 0 0 30px rgba(251, 188, 5, 0.7) !important; animation: none !important; }
+
+        /* CONTENT 2: Beauty History (Merah/Pinkish) */
+        .story-item:nth-child(2):hover {
+            border-color: rgba(234, 67, 53, 0.6) !important;
+            box-shadow: 0 20px 60px rgba(234, 67, 53, 0.3), inset 0 0 20px rgba(234, 67, 53, 0.2) !important;
+        }
+        .story-item:nth-child(2) .story-subtitle { color: #EA4335 !important; text-shadow: 0 0 10px rgba(234, 67, 53, 0.5) !important; }
+        .story-item:nth-child(2) .story-icon { background: linear-gradient(135deg, rgba(234, 67, 53, 0.2), transparent) !important; border-color: rgba(234, 67, 53, 0.5) !important; box-shadow: 0 0 15px rgba(234, 67, 53, 0.3) !important; }
+        .story-item:nth-child(2):hover .story-title { color: #EA4335 !important; text-shadow: 0 0 15px rgba(234, 67, 53, 1), 0 0 30px rgba(234, 67, 53, 0.7) !important; animation: none !important; }
+
+        /* CONTENT 3: Social History (Biru) */
+        .story-item:nth-child(3):hover {
+            border-color: rgba(66, 133, 244, 0.6) !important;
+            box-shadow: 0 20px 60px rgba(66, 133, 244, 0.3), inset 0 0 20px rgba(66, 133, 244, 0.2) !important;
+        }
+        .story-item:nth-child(3) .story-subtitle { color: #4285F4 !important; text-shadow: 0 0 10px rgba(66, 133, 244, 0.5) !important; }
+        .story-item:nth-child(3) .story-icon { background: linear-gradient(135deg, rgba(66, 133, 244, 0.2), transparent) !important; border-color: rgba(66, 133, 244, 0.5) !important; box-shadow: 0 0 15px rgba(66, 133, 244, 0.3) !important; }
+        .story-item:nth-child(3):hover .story-title { color: #4285F4 !important; text-shadow: 0 0 15px rgba(66, 133, 244, 1), 0 0 30px rgba(66, 133, 244, 0.7) !important; animation: none !important; }
+/* =========================================
+           CONTACT & FOOTER (GLASSMORPHISM & CLASSY)
+           ========================================= */
+        .contact-section { position: relative; min-height: auto; padding: 120px 5% 150px 5% !important; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+        
+        /* Cahaya halus di belakang kartu */
+        .contact-glow-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; height: 80vw; max-width: 800px; max-height: 800px; background: radial-gradient(circle, rgba(66, 133, 244, 0.08) 0%, rgba(251, 188, 5, 0.05) 40%, transparent 70%); border-radius: 50%; z-index: 0; pointer-events: none; animation: pulseGlow 8s infinite alternate; }
+        
+        /* Kartu Kaca Utama */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-top: 2px solid rgba(66, 133, 244, 0.4); 
+            padding: 60px 40px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(20px); text-align: center; max-width: 800px; width: 100%; position: relative; z-index: 2;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .contact-card:hover { transform: translateY(-5px); box-shadow: 0 30px 60px rgba(66, 133, 244, 0.15), inset 0 0 30px rgba(255, 255, 255, 0.03); border-color: rgba(66, 133, 244, 0.3); }
+        
+        /* Footer Paling Bawah */
+        .footer-bar { position: absolute; bottom: 0; left: 0; width: 100%; padding: 25px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(10px); text-align: center; z-index: 10; }
+        .footer-text { color: #888; font-size: 0.9rem; letter-spacing: 1px; font-family: 'Outfit', sans-serif; margin-bottom: 5px;}
+        .footer-dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .footer-dot { width: 6px; height: 6px; border-radius: 50%; }
+    </style>
+</head>
+<body>
+
+    <div class="mouse-glow" id="glow"></div>
+
+<section id="hero">
+        <div class="reveal hero-layout">
+            <div class="hero-text">
+                <div class="hero-badge">✨ Aspiring Google Student Ambassador</div>
+                <h1 class="hero-headline">Future AI Communicator &<br><span>Community-Driven Leader</span></h1>
+                
+                <div class="typing-container">
+                    <span class="typed-text"></span><span class="cursor">&nbsp;</span>
+                </div>
+
+                <div class="btn-group">
+                    <a href="#about" class="btn btn-primary">Explore My Journey</a>
+                    <a href="https://linkedin.com/in/velysha-anggraini-30257b374" target="_blank" class="btn btn-outline">Connect on LinkedIn</a>
+                </div>
+            </div>
+
+            <div class="hero-image-container">
+                <img src="IMAGES/fotoku.png" alt="Velysha" class="hero-profile-pic">
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="reveal about-container">
+            <div class="about-bg-blobs">
+                <div class="blob blob-1"></div>
+                <div class="blob blob-2"></div>
+            </div>
+
+            <div class="about-content-wrapper">
+                <h2 class="section-title text-animated">About Me <span style="color:#4285F4; font-family: 'Outfit', sans-serif;">.</span></h2>
+                
+                <div class="about-grid enhanced-card">
+                    <div class="about-image-wrapper text-animated delay-1" title="Coba Pencet Fotonya!">
+                        <div class="photo-frame">
+                            <img src="IMAGES/myfoto.png" alt="Velysha" class="about-photo">
+                        </div>
+
+                        <div class="deco-dot dot-blue"></div>
+                        <div class="deco-dot dot-red"></div>
+                        <div class="deco-dot dot-yellow"></div>
+                        <div class="deco-star star-green" style="top:-15px; right:-15px;">
+                            <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="about-text-content">
+                        <p class="text-animated delay-1">I am an <strong class="glow-text">Economics Development</strong> student at UPN “Veteran” Jawa Timur with a solid background in Accounting. Having a <strong class="glow-text">Certified Accounting Technician</strong> competency has taught me precision, but my curiosity didn't stop at numbers.</p>
+                        
+                        <p class="text-animated delay-2">I’ve always been active in national seminars and campus organizations because I love learning. Lately, I’ve found a huge interest in how <strong class="glow-text">AI and Google’s technology</strong> can help us grow as a community.</p>
+                        
+                        <p class="text-animated delay-3">For me, tech isn't just about tools—it's about how we communicate. I enjoy turning complex ideas into something everyone can understand and relate to.</p>
+
+                        <div class="about-skills text-animated delay-4">
+                            <span class="skill-badge blue">Analytical Thinking</span>
+                            <span class="skill-badge red">Public Speaking</span>
+                            <span class="skill-badge yellow">AI Enthusiast</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="leadership" class="lead-section">
+        <div class="lead-bg-glow"></div>
+        
+        <div class="deco-star star-blue" style="top: 15%; left: 8%; opacity: 0.4; width: 45px !important; height: 45px !important;">
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+        </div>
+        <div class="deco-dot dot-yellow" style="bottom: 10%; right: 5%; width: 25px; height: 25px; opacity: 0.6;"></div>
+        <div class="deco-dot dot-red" style="top: 40%; left: 2%; width: 12px; height: 12px; opacity: 0.8;"></div>
+
+        <div class="reveal lead-container">
+            <h2 class="section-title">Leadership & Engagement <span style="color: #4285F4; font-family: 'Outfit', sans-serif;">.</span></h2>
+            
+            <div class="lead-grid">
+                <div class="lead-card card-1">
+                    <div class="lead-img-box">
+                        <img src="IMAGES/kegiatan1.jpeg" alt="Youth Community Service" class="lead-img" onerror="this.style.display='none'">
+                    </div>
+                    <div class="lead-info">
+                        <span class="lead-badge">Pemuda Tangguh Surabaya</span>
+                        <h3>Youth Community Service</h3>
+                        <p>Actively engaged in grassroots community initiatives, developing empathy, social responsibility, and hands-on leadership through impactful local service programs.</p>
+                    </div>
+                </div>
+
+                <div class="lead-card card-2">
+                    <div class="lead-img-box">
+                        <img src="IMAGES/kegiatan2.jpg" alt="INSCaw 2025" class="lead-img" onerror="this.style.display='none'">
+                    </div>
+                    <div class="lead-info">
+                        <span class="lead-badge">Most Active Participant</span>
+                        <h3>INSCaw 2025</h3>
+                        <p>Demonstrated proactive engagement and critical thinking in collaborative discussions, highlighting a strong commitment to continuous learning.</p>
+                    </div>
+                </div>
+
+                <div class="lead-card card-3">
+                    <div class="lead-img-box">
+                        <img src="IMAGES/kegiatan3.jpg" alt="National Seminar" class="lead-img" onerror="this.style.display='none'">
+                    </div>
+                    <div class="lead-info">
+                        <span class="lead-badge">Personal Branding</span>
+                        <h3>National Seminar</h3>
+                        <p>Expanded strategic knowledge in building a professional digital presence and cultivating an entrepreneurial mindset for future tech initiatives.</p>
+                    </div>
+                </div>
+
+                <div class="lead-card card-4">
+                    <div class="lead-img-box">
+                        <img src="IMAGES/kegiatan4.jpeg" alt="World Clean Up Day" class="lead-img" onerror="this.style.display='none'">
+                    </div>
+                    <div class="lead-info">
+                        <span class="lead-badge">Community Rep</span>
+                        <h3>World Clean Up Day 2025</h3>
+                        <p>Led localized environmental efforts, mobilizing peers to participate in global sustainability actions and demonstrating community-driven leadership.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications" class="cert-fresh-section">
+        <div class="cert-bg-text">MILESTONES</div>
+        <div class="reveal cert-fresh-container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 60px;">Certifications & <span style="color: #FBBC05; font-family: 'Cormorant Garamond', serif;">Achievements</span></h2>
+
+            <div class="cert-fresh-item">
+                <div class="cert-photo-wrap">
+                    <div class="cert-photo-frame">
+                        <div class="cert-year-badge">2025</div>
+                        <img src="IMAGES/sertif1.jpg" alt="National Seminar UINSA" onerror="this.src='https://via.placeholder.com/800x600/121212/4285F4?text=Seminar+UINSA'">
+                    </div>
+                </div>
+                <div class="cert-text-wrap">
+                    <div class="cert-number-watermark">01</div>
+                    <h3>National Seminar UINSA</h3>
+                    <p>Participated in the "Personal Branding x Entrepreneurship Strategi" seminar held by the Student Executive Board, Faculty of Science and Technology, focusing on competitive digital era strategies.</p>
+                    <span class="cert-chip" style="color: #8ab4f8; border-color: rgba(66, 133, 244, 0.3); background: rgba(66, 133, 244, 0.05);">Seminar Participant</span>
+                </div>
+            </div>
+
+            <div class="cert-fresh-item">
+                <div class="cert-photo-wrap">
+                    <div class="cert-photo-frame">
+                        <div class="cert-year-badge">2025</div>
+                        <img src="IMAGES/sertif2.jpg" alt="Accounting Competency" onerror="this.src='https://via.placeholder.com/800x600/121212/EA4335?text=Sertifikat+Akuntansi'">
+                    </div>
+                </div>
+                <div class="cert-text-wrap">
+                    <div class="cert-number-watermark">02</div>
+                    <h3>Accounting Competency Certification</h3>
+                    <p>Achieved the "Kompeten" predicate in the vocational competency test for Accounting, verified by SMK Negeri 2 Buduran Sidoarjo and industry partner PT Varia Usaha Beton.</p>
+                    <span class="cert-chip" style="color: #f28b82; border-color: rgba(234, 67, 53, 0.3); background: rgba(234, 67, 53, 0.05);">Professional Competency</span>
+                </div>
+            </div>
+
+            <div class="cert-fresh-item">
+                <div class="cert-photo-wrap">
+                    <div class="cert-photo-frame">
+                        <div class="cert-year-badge">Score: 96</div>
+                        <img src="IMAGES/sertif3.jpg" alt="Competency Transcript" onerror="this.src='https://via.placeholder.com/800x600/121212/34A853?text=Transkrip+Nilai'">
+                    </div>
+                </div>
+                <div class="cert-text-wrap">
+                    <div class="cert-number-watermark">03</div>
+                    <h3>Competency Assessment Transcript</h3>
+                    <p>Detailed assessment transcript demonstrating excellent proficiency (Score 96) in various accounting principles, financial reporting, and accounting software applications (MYOB/Spreadsheet).</p>
+                    <span class="cert-chip" style="color: #81c995; border-color: rgba(52, 168, 83, 0.3); background: rgba(52, 168, 83, 0.05);">Academic Transcript</span>
+                </div>
+            </div>
+
+            <div class="cert-fresh-item">
+                <div class="cert-photo-wrap">
+                    <div class="cert-photo-frame">
+                        <div class="cert-year-badge">2024</div>
+                        <img src="IMAGES/sertif4.jpg" alt="Accounting Technician" onerror="this.src='https://via.placeholder.com/800x600/121212/FBBC05?text=Sertifikat+LKP'">
+                    </div>
+                </div>
+                <div class="cert-text-wrap">
+                    <div class="cert-number-watermark">04</div>
+                    <h3>Implementing Accounting Technician</h3>
+                    <p>Officially certified as an Implementing Accounting Technician by Lembaga Kursus dan Pelatihan (LKP) "Karya Mandiri", demonstrating readiness for real-world financial administration tasks.</p>
+                    <span class="cert-chip" style="color: #fde293; border-color: rgba(251, 188, 5, 0.3); background: rgba(251, 188, 5, 0.05);">Technical Expertise</span>
+                </div>
+            </div>
+
+            <div class="cert-fresh-item">
+                <div class="cert-photo-wrap">
+                    <div class="cert-photo-frame">
+                        <div class="cert-year-badge">Details</div>
+                        <img src="IMAGES/sertif5.jpg" alt="Technician Details" onerror="this.src='https://via.placeholder.com/800x600/121212/4285F4?text=Daftar+Unit'">
+                    </div>
+                </div>
+                <div class="cert-text-wrap">
+                    <div class="cert-number-watermark">05</div>
+                    <h3>Technician Competency Details</h3>
+                    <p>Comprehensive breakdown of the LKP certification showcasing high marks and practical mastery in managing petty cash, bank administration, purchasing, sales, and Accurate software.</p>
+                    <span class="cert-chip" style="color: #8ab4f8; border-color: rgba(66, 133, 244, 0.3); background: rgba(66, 133, 244, 0.05);">Competency Details</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="portfolio" class="story-section">
+        <div class="story-glow-1"></div>
+        <div class="story-glow-2"></div>
+        
+        <div class="sparkle-star" style="top: 10%; left: 10%; color: #FBBC05; width: 60px; height: 60px;"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" fill="currentColor"/></svg></div>
+        <div class="sparkle-star" style="top: 20%; right: 15%; color: #4285F4; width: 45px; height: 45px; animation-delay: 1s;"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" fill="currentColor"/></svg></div>
+        
+        <div class="sparkle-dot" style="top: 80%; left: 20%; width: 8px; height: 8px; background: #FBBC05; color: #FBBC05;"></div>
+        <div class="sparkle-dot" style="top: 90%; left: 50%; width: 12px; height: 12px; background: #4285F4; color: #4285F4; animation-delay: 2s;"></div>
+
+        <div class="reveal story-container">
+            <h2 class="section-title elegant-glow-title" style="text-align: center; font-style: italic; font-size: 3.5rem;">
+                <span style="font-family: 'Outfit', sans-serif;">✦</span> Digital Storytelling <span style="font-family: 'Outfit', sans-serif;">✦</span>
+            </h2>
+            <p style="text-align: center; color: #b0b3b8; max-width: 800px; margin: 0 auto 40px auto; line-height: 1.8; font-size: 1.1rem;">
+                I create engaging digital storytelling content that blends beauty, unique historical facts, and modern technology. As an affiliate creator, I actively leverage AI tools to generate and produce captivating promotional videos.
+            </p>
+
+            <div class="story-gallery">
+                <div class="story-item">
+                    <img src="IMAGES/konten1.jpeg" alt="Glow Secret" class="story-img" onerror="this.src='https://via.placeholder.com/800x600/1a1a2e/FBBC05?text=Glow+Secret'">
+                    <div class="story-info">
+                        <div>
+                            <div class="story-subtitle">Content 01</div>
+                            <h3 class="story-title">Glow Secret</h3>
+                        </div>
+                        <div class="story-icon">✨</div>
+                    </div>
+                </div>
+
+                <div class="story-item">
+                    <img src="IMAGES/konten2.jpeg" alt="Beauty History" class="story-img" onerror="this.src='https://via.placeholder.com/800x600/1a1a2e/EA4335?text=Beauty+History'">
+                    <div class="story-info">
+                        <div>
+                            <div class="story-subtitle">Content 02</div>
+                            <h3 class="story-title">Beauty History</h3>
+                        </div>
+                        <div class="story-icon">🌸</div>
+                    </div>
+                </div>
+
+                <div class="story-item">
+                    <img src="IMAGES/konten3.jpeg" alt="Affiliate with AI" class="story-img" onerror="this.src='https://via.placeholder.com/800x600/1a1a2e/4285F4?text=Social+History'">
+                    <div class="story-info">
+                        <div>
+                            <div class="story-subtitle">Content 03</div>
+                            <h3 class="story-title">Affiliate with AI</h3>
+                        </div>
+                        <div class="story-icon">🎓</div>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-glow-bg"></div>
+        
+        <div class="reveal contact-card">
+            <div class="deco-filigree filigree-tl" style="border-color: rgba(66, 133, 244, 0.3);"></div>
+            <div class="deco-filigree filigree-br" style="border-color: rgba(251, 188, 5, 0.3);"></div>
+
+            <h2 class="section-title elegant-glow-title" style="margin-bottom: 25px; font-size: 3.5rem;">Let's <span style="font-family: 'Cormorant Garamond', serif;">Connect</span></h2>
+            
+            <p style="color: #b0b3b8; margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; max-width: 600px; margin-left: auto; margin-right: auto;">
+                I'm always open to discussing tech, economics, and community building. Whether you have an opportunity or just want to say hi, feel free to drop a message!
+            </p>
+            
+            <div class="btn-group" style="justify-content: center;">
+                <a href="mailto:velyshaandi@gmail.com" class="btn btn-primary" style="box-shadow: 0 5px 20px rgba(66, 133, 244, 0.3);">Email Me</a>
+                <a href="https://linkedin.com/in/velysha-anggraini-30257b374" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
+            </div>
+        </div>
+
+        <div class="footer-bar">
+            <p class="footer-text">&copy; 2026 Velysha Wednesd Anggraini. Crafted with passion.</p>
+            <div class="footer-dots">
+                <div class="footer-dot" style="background: #4285F4; box-shadow: 0 0 10px #4285F4;"></div>
+                <div class="footer-dot" style="background: #EA4335; box-shadow: 0 0 10px #EA4335;"></div>
+                <div class="footer-dot" style="background: #FBBC05; box-shadow: 0 0 10px #FBBC05;"></div>
+                <div class="footer-dot" style="background: #34A853; box-shadow: 0 0 10px #34A853;"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Efek Cahaya Kursor
+        const glow = document.getElementById('glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        });
+
+        // Animasi Scroll
+        const reveals = document.querySelectorAll(".reveal");
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("active");
+                observer.unobserve(entry.target); 
+            });
+        }, revealOptions);
+        reveals.forEach(reveal => { revealOnScroll.observe(reveal); });
+
+        // Efek Ngetik (Typing Effect)
+        const typedTextSpan = document.querySelector(".typed-text");
+        const textArray = ["Economics Student", "Digital Storyteller", "AI Enthusiast", "Google Gemini Advocate"];
+        let textArrayIndex = 0, charIndex = 0;
+
+        function type() {
+            if (charIndex < textArray[textArrayIndex].length) {
+                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 100);
+            } else { setTimeout(erase, 2000); }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 50);
+            } else {
+                textArrayIndex++;
+                if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+                setTimeout(type, 600);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() { setTimeout(type, 2250); });
+    </script>
+</body>
+</html>
