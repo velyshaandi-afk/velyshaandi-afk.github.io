@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1280">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Velysha | Future AI Communicator</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -453,6 +453,49 @@
         .footer-text { color: #888; font-size: 0.9rem; letter-spacing: 1px; font-family: 'Outfit', sans-serif; margin-bottom: 5px;}
         .footer-dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
         .footer-dot { width: 6px; height: 6px; border-radius: 50%; }
+/* =========================================
+           FIX TAMPILAN HP (YANG BENERAN RAPI & ELEGAN)
+           ========================================= */
+        @media (max-width: 850px) {
+            /* Global HP */
+            section { padding: 80px 5% !important; min-height: auto !important; }
+            .section-title { font-size: 2.5rem !important; text-align: center !important; }
+            
+            /* Hero Cover HP */
+            .hero-layout { flex-direction: column-reverse !important; text-align: center !important; gap: 40px !important; margin-top: 50px !important; }
+            .hero-headline { font-size: 2.5rem !important; margin-bottom: 15px !important; }
+            .hero-text { display: flex; flex-direction: column; align-items: center; }
+            .hero-profile-pic { max-width: 260px !important; margin: 0 auto !important; }
+            .btn-group { justify-content: center !important; }
+
+            /* About Me HP */
+            .about-grid.enhanced-card { display: flex !important; flex-direction: column !important; gap: 30px !important; padding: 40px 20px !important; text-align: center !important; }
+            .about-image-wrapper { width: 220px !important; height: 220px !important; margin: 0 auto !important; }
+            .about-text-content p { text-align: center !important; font-size: 1.05rem !important; }
+            .about-skills { justify-content: center !important; }
+
+            /* Leadership HP */
+            .lead-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+
+            /* Certifications HP */
+            .cert-fresh-container { gap: 60px !important; }
+            .cert-fresh-item, .cert-fresh-item:nth-child(even) { flex-direction: column !important; text-align: center !important; gap: 20px !important;}
+            .cert-photo-wrap { width: 100% !important; perspective: none !important; }
+            .cert-photo-frame { transform: none !important; width: 100% !important; aspect-ratio: auto !important; padding: 10px !important;}
+            .cert-fresh-item:nth-child(even) .cert-photo-frame { transform: none !important; }
+            .cert-year-badge { position: relative !important; top: 0 !important; right: 0 !important; left: 0 !important; display: inline-block; margin-bottom: 10px; }
+            .cert-number-watermark { display: none !important; /* Dihapus aja di HP biar ga sumpek */ }
+            .cert-text-wrap { padding: 10px !important; }
+
+            /* Storytelling HP */
+            .story-gallery { flex-direction: column !important; height: auto !important; gap: 20px !important; margin-top: 30px !important;}
+            .story-item { flex: none !important; width: 100% !important; height: 300px !important; }
+            .story-info { opacity: 1 !important; transform: none !important; bottom: 15px !important; left: 15px !important; right: 15px !important; padding: 15px !important; }
+            .story-icon { display: none !important; }
+
+            /* Contact & Footer HP */
+            .contact-card { padding: 40px 20px !important; }
+        }
     </style>
 </head>
 <body>
